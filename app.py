@@ -37,8 +37,8 @@ st.sidebar.download_button(
     mime="application/json"
 )
 
-# 3. Upload Button
-uploaded_file = st.sidebar.file_uploader("📤 UPLOAD VAULT FILE", type="json")
+# 3. Upload Button (Now accepts BOTH .json and .txt)
+uploaded_file = st.sidebar.file_uploader("📤 UPLOAD VAULT FILE", type=["json", "txt"])
 
 if uploaded_file is not None:
     try:
