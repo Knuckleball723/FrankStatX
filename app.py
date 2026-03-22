@@ -23,21 +23,17 @@ for i in range(36):
         st.session_state.vault[i] = st.text_input(f"Slot {i+1}", value=st.session_state.vault[i], key=f"slot_{i}")
 
 # --- THE SCOUT (LOGIC) ---
-def check_espn(protected_ids):st.write(f"🔍 Scanning ESPN for {len(protected_ids)} prospects...")
+def check_espn(protected_ids):
+    st.write(f"🔍 Scanning ESPN for {len(protected_ids)} prospects...")
     try:
         response = requests.get(ESPN_URL)
         soup = BeautifulSoup(response.text, 'html.parser')
-        
-        # Find all transaction rows (ESPN uses specificclasses)
-        rows = soup.find_all('tr', class_='Table__TR')
-        
+        rows = soup.find_all('tr')
         matches = []
         for row in rows:
             row_text = row.get_text()
-            for p_id in protected_ids:
-                if p_id in row_text and len(p_id) > 2:
+            for p_id in protected_ids:if p_id in row_text and len(p_id) > 2:
                     matches.append(f"MATCH FOUND: Prospect {p_id} was moved!")
-        
         return matches
     except Exception as e:
         return [f"Error connecting to ESPN: {e}"]
