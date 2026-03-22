@@ -32,7 +32,8 @@ def check_espn(protected_ids):
         matches = []
         for row in rows:
             row_text = row.get_text()
-            for p_id in protected_ids:if p_id in row_text and len(p_id) > 2:
+            for p_id in protected_ids:
+                if p_id in row_text and len(p_id) > 2:
                     matches.append(f"MATCH FOUND: Prospect {p_id} was moved!")
         return matches
     except Exception as e:
