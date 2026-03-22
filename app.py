@@ -1,5 +1,6 @@
 import streamlit as st
-import requestsfrom bs4 import BeautifulSoup
+import requestsfrom bs4
+import BeautifulSoup
 import time
 
 # --- CONFIGURATION ---
