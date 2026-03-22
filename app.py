@@ -42,6 +42,7 @@ if uploaded_file is not None:
         st.session_state.teams = teams_part.split(",")
         st.session_state.vault = vault_part.split(",")
         st.sidebar.success("Vault Loaded!")
+        st.rerun()
     except:
         st.sidebar.error("Invalid File")
 
