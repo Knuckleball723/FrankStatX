@@ -13,12 +13,26 @@ st.set_page_config(page_title="FrankStatX Web", layout="wide")
 
 st.title("⚾ FrankStatX: Prospect Watchdog")
 
-# --- INITIALIZE VAULT ---
-if'vault' not in st.session_state:
-    st.session_state.teams = [""] * 12
-    st.session_state.vault = [""] * 36
-
-import json
+# --- INITIALIZE VAULT (Hard-Coded for Tonight) ---
+if 'vault' not in st.session_state:
+    # These are your 12 Teams
+    st.session_state.teams = ["Amato", "Cacciato", "Calise", "Callahan", "Canney", "Draper", "Ray", "Reynolds", "Townsend,J", "Townsend,K", "Utschig", "Vaccaro"]
+    
+    # These are your current IDs (36 slots total)
+    # I have placed your IDs in the correct spots based on your list
+    st.session_state.vault = [
+        "", "", "",          # Amato
+        "", "", "",          # Cacciato
+        "5124103", "", "",   # Calise
+        "4917646", "5148963", "", # Callahan
+        "", "","",          # Canney
+        "5150947", "", "",   # Draper
+        "", "", "",          # Ray
+        "5218285", "", "",   # Reynolds
+        "", "", "",          # Townsend,J
+        "", "", "",          # Townsend,K"41282", "4987418", "", # Utschig
+        "4917690", "4837405", "" # Vaccaro
+    ]
 
 # --- SAVE/LOAD SYSTEM ---
 st.sidebar.header("💾 Vault Management")
