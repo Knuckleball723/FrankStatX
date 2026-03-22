@@ -28,13 +28,13 @@ def check_espn(protected_ids):st.write(f"🔍 Scanning ESPN for {len(protected_i
         response = requests.get(ESPN_URL)
         soup = BeautifulSoup(response.text, 'html.parser')
         
-        # Find all transaction rows (ESPN uses specificclasses)
+        # Find all transaction rows
         rows = soup.find_all('tr', class_='Table__TR')
         
         matches = []
         for row in rows:
             row_text = row.get_text()
-            for p_id in protected_ids:
+            for p_id inprotected_ids:
                 if p_id in row_text and len(p_id) > 2:
                     matches.append(f"MATCH FOUND: Prospect {p_id} was moved!")
         
