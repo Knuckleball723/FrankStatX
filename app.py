@@ -52,7 +52,23 @@ for i in range(12):
 # --- THE SCOUT LOGIC ---
 # (Keep your existing check_espn function and Scan Button belowthis)
 
-# --- THE SCOUT LOGIC ---
+import smtplib
+from email.mime.text import MIMEText
+
+# --- EMAIL CONFIG ---
+EMAIL_SENDER = "your-email@gmail.com"
+EMAIL_RECEIVER = "destination-email@gmail.com"
+EMAIL_PASSWORD = "your-16-char-app-password"def send_email_alert(message):
+    try:
+        msg = MIMEText(message)
+        msg['Subject'] = "🚨 FrankStatX: PROSPECT ALERT!"
+        msg['From'] = EMAIL_SENDER
+        msg['To'] = EMAIL_RECEIVERwith smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+            server.login(EMAIL_SENDER, EMAIL_PASSWORD)
+            server.sendmail(EMAIL_SENDER, EMAIL_RECEIVER, msg.as_string())
+        st.sidebar.success("📧 Email Alert Sent!")
+    except Exception as e:
+        st.sidebar.error(f"Email failed: {e}")# --- THE SCOUT LOGIC ---
 def check_espn(protected_ids):
     st.write(f"🔍 Scanning ESPN for {len(protected_ids)} prospects...")
     
@@ -62,11 +78,15 @@ def check_espn(protected_ids):
         rows = soup.find_all('tr')
         matches = []
         
-        for row in rows:
+for row in rows:
             row_text = row.get_text()
             for p_id in protected_ids:
                 if p_id in row_text and len(p_id) > 2:
-                    matches.append(f"MATCH FOUND: Prospect {p_id} was moved!")
+                    alert_msg = f"MATCH FOUND: Prospect{p_id} was moved!"
+                    matches.append(alert_msg)
+                    # --- ADD THIS LINE BELOW ---
+                    send_email_alert(alert_msg)
+                    
         return matches
         
     except Exception as e:
