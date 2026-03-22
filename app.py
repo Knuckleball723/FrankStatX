@@ -18,33 +18,37 @@ if'vault' not in st.session_state:
     st.session_state.teams = [""] * 12
     st.session_state.vault = [""] * 36
 
+import json
+
 # --- SAVE/LOAD SYSTEM ---
 st.sidebar.header("💾 Vault Management")
 
-# 1.Create the data string to save
-vault_data = ",".join(st.session_state.teams) + "|" + ",".join(st.session_state.vault)
+# 1. Create a dictionary of the current data
+current_data = {"teams": st.session_state.teams,
+    "vault": st.session_state.vault
+}
+json_data = json.dumps(current_data)
 
 # 2. Download Button
 st.sidebar.download_button(
-    label="📥 DOWNLOAD VAULT FILE",
-    data=vault_data,
-    file_name="frankstatx_vault.txt",
-    mime="text/plain"
+    label="📥 DOWNLOAD VAULTFILE",
+    data=json_data,
+    file_name="frankstatx_vault.json",
+    mime="application/json"
 )
 
 # 3. Upload Button
-uploaded_file = st.sidebar.file_opener = st.sidebar.file_uploader("📤 UPLOAD VAULT FILE", type="txt")
+uploaded_file = st.sidebar.file_uploader("📤 UPLOAD VAULT FILE", type="json")
 
 if uploaded_file is not None:
-    content = uploaded_file.read().decode("utf-8")
     try:
-        teams_part, vault_part = content.split("|")
-        st.session_state.teams = teams_part.split(",")
-        st.session_state.vault = vault_part.split(",")
+        new_data = json.load(uploaded_file)
+        st.session_state.teams = new_data["teams"]
+        st.session_state.vault = new_data["vault"]
         st.sidebar.success("Vault Loaded!")
         st.rerun()
     except:
-        st.sidebar.error("Invalid File")
+        st.sidebar.error("Error: Use a .json file")
 
 # --- THE VAULT UI ---
 st.subheader("12-Team Protected Vault")
