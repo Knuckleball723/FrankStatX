@@ -27,7 +27,7 @@ if 'vault' not in st.session_state:
         "", "", "",                # Townsend,J
         "", "", "",                # Townsend,K
         "41282", "4987418", "",    # Utschig
-        "4917690", "4837405", ""   # Vaccaro
+        "4917690", "4837405", "32801"   # Vaccaro
     ]
 
 # --- THE VAULT UI ---
