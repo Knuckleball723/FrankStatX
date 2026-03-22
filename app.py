@@ -13,14 +13,29 @@ st.title("⚾ FrankStatX: Prospect Watchdog")
 st.subheader("12-Team Protected Vault")
 
 # --- THE VAULT (UI) ---
-# We create a 12x3 gridfor the IDs
 if 'vault' not in st.session_state:
+    # We need 12 Team Names and 36 ID Slots
+    st.session_state.teams = [""] * 12
     st.session_state.vault = [""] * 36
 
-cols = st.columns(3)
-for i in range(36):
-    with cols[i % 3]:
-        st.session_state.vault[i] = st.text_input(f"Slot {i+1}", value=st.session_state.vault[i], key=f"slot_{i}")
+# Create 12 rows (One for each team)
+for i in range(12):
+    col1, col2, col3, col4 = st.columns([2, 1, 1, 1]) # Team name gets more space
+    
+    with col1:
+        st.session_state.teams[i] = st.text_input(f"Team {i+1}", value=st.session_state.teams[i],key=f"team_{i}")
+    
+    with col2:
+        idx = i * 3
+        st.session_state.vault[idx] = st.text_input(f"S1", value=st.session_state.vault[idx], key=f"s1_{i}", label_visibility="collapsed")
+        
+    with col3:
+        idx = i * 3 + 1
+        st.session_state.vault[idx] = st.text_input(f"S2", value=st.session_state.vault[idx], key=f"s2_{i}", label_visibility="collapsed")
+        
+    with col4:
+        idx = i * 3 + 2
+        st.session_state.vault[idx] = st.text_input(f"S3", value=st.session_state.vault[idx], key=f"s3_{i}", label_visibility="collapsed")
 
 # --- THE SCOUT (LOGIC) ---
 def check_espn(protected_ids):
