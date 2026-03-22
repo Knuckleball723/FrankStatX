@@ -14,34 +14,34 @@ st.subheader("12-Team Protected Vault")
 
 # --- THE VAULT (UI) ---
 if 'vault' not in st.session_state:
-    st.session_state.teams = [""] * 12st.session_state.vault = [""] * 36
+    st.session_state.teams = [""] * 12
+    
+    st.session_state.vault = [""] * 36
 
 # 1. Create a Header Row for Alignment
-head1, head2, head3, head4 = st.columns([2, 1, 1, 1])
-head1.markdown("**TEAM NAME**")head2.markdown("**SLOT 1**")
-head3.markdown("**SLOT 2**")
-head4.markdown("**SLOT 3**")
+h1, h2, h3, h4 = st.columns([2, 1, 1, 1])
+h1.markdown("**TEAM NAME**")
+h2.markdown("**SLOT 1**")
+h3.markdown("**SLOT 2**")
+h4.markdown("**SLOT 3**")
 
-# 2. Create the 12 Rows
+#2. Create the 12 Rows
 for i in range(12):
-    # Using a container forces thecolumns to stay together
     with st.container():
-        col1, col2, col3, col4 = st.columns([2, 1, 1, 1])
+        c1, c2, c3, c4 = st.columns([2, 1, 1, 1])
         
-        with col1:
-            st.session_state.teams[i] = st.text_input(f"Team {i+1}", value=st.session_state.teams[i], key=f"team_{i}", label_visibility="collapsed")
+        with c1:st.session_state.teams[i] = st.text_input(f"T{i}", value=st.session_state.teams[i], key=f"team_{i}", label_visibility="collapsed")
         
-        with col2:
-            idx = i * 3
-            st.session_state.vault[idx] = st.text_input(f"S1_{i}", value=st.session_state.vault[idx], key=f"s1_{i}", label_visibility="collapsed")
+        with c2:
+            idx2 = i *3
+            st.session_state.vault[idx2] = st.text_input(f"S1_{i}", value=st.session_state.vault[idx2], key=f"s1_{i}", label_visibility="collapsed")
             
-        with col3:
-            idx = i * 3 + 1
-            st.session_state.vault[idx] = st.text_input(f"S2_{i}", value=st.session_state.vault[idx], key=f"s2_{i}", label_visibility="collapsed")
+        with c3:idx3 = i * 3 + 1
+            st.session_state.vault[idx3] = st.text_input(f"S2_{i}", value=st.session_state.vault[idx3], key=f"s2_{i}", label_visibility="collapsed")
             
-        with col4:
-            idx = i * 3 +2
-            st.session_state.vault[idx] = st.text_input(f"S3_{i}", value=st.session_state.vault[idx], key=f"s3_{i}", label_visibility="collapsed")
+        with c4:
+            idx4 = i * 3 + 2
+            st.session_state.vault[idx4] = st.text_input(f"S3_{i}", value=st.session_state.vault[idx4], key=f"s3_{i}", label_visibility="collapsed")
 
 # --- THE SCOUT (LOGIC) ---
 def check_espn(protected_ids):
