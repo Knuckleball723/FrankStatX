@@ -69,4 +69,5 @@ if st.button("SAVE & SCAN NOW", type="primary"):
             for r in results:
                 st.error(r)
         else:
-            st.success("✅ No protected prospects moved.")st.info("Note: Do not refresh the page after entering IDs, or they will clear.")
+            st.success("✅ No protected prospects moved.")
+            st.info("Note: Do not refresh the page after entering IDs, or they will clear.")
