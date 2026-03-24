@@ -67,7 +67,8 @@ for i in range(12):
         s3_val = str(df.iloc[i, 3]) if len(df.columns) > 3 and not pd.isna(df.iloc[i, 3]) else ""
 
     with c1:
-        t = st.text_input(f"T{i}", value=t_val, key=f"t_{i}", label_visibility="collapsed")with c2:
+        t = st.text_input(f"T{i}", value=t_val, key=f"t_{i}", label_visibility="collapsed")
+    with c2:
         s1 = st.text_input(f"S1_{i}", value=s1_val, key=f"s1_{i}", label_visibility="collapsed")
     with c3:
         s2 = st.text_input(f"S2_{i}", value=s2_val, key=f"s2_{i}", label_visibility="collapsed")
