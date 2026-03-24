@@ -28,7 +28,7 @@ h3.write("**BID $**")
 h4.write("**TIMESTAMP**")
 
 # Display 20 rows for entry
-fori in range(20):
+for i in range(20):
     c1, c2, c3, c4 = st.columns([2, 2, 1, 2])
     
     # Safety check for existing data
