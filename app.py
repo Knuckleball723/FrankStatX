@@ -47,7 +47,9 @@ for i in range(12):
     with c3:
         s2 = st.text_input(f"S2_{i}", value=s2_val, key=f"s2_{i}", label_visibility="collapsed")
     with c4:
-        s3 = st.text_input(f"S3_{i}", value=s3_val, key=f"s3_{i}", label_visibility="collapsed")updated_data.append([t, s1, s2, s3])
+        s3 = st.text_input(f"S3_{i}", value=s3_val, key=f"s3_{i}", label_visibility="collapsed")
+        
+        updated_data.append([t, s1, s2, s3])
 
 # --- SAVE & SCAN BUTTON ---
 if st.button("💾 SAVE TO SHEET & SCAN ESPN"):
