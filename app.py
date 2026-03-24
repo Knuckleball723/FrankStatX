@@ -9,48 +9,56 @@ ESPN_URL = f"https://fantasy.espn.com/baseball/recentactivity?leagueId={LEAGUE_I
 st.set_page_config(page_title="FrankStatX Web", layout="wide")
 st.title("⚾ FrankStatX: Prospect Watchdog")
 
-# --- INITIALIZE VAULT (Hard-Coded for Tonight) ---
-if 'vault' not in st.session_state:
-    # Your 12 Teams
-    st.session_state.teams = ["Amato", "Cacciato", "Calise", "Callahan", "Canney", "Draper", "Ray", "Reynolds", "Townsend,J", "Townsend,K", "Utschig", "Vaccaro"]
-    
-    # Your current IDs (36 slots total)
-    st.session_state.vault = [
-        "", "", "",                # Amato
-        "", "", "",# Cacciato
-        "5124103", "", "",         # Calise
-        "4917646", "5148963", "",  # Callahan
-        "", "", "",                # Canney
-        "5150947", "", "",         # Draper
-        "", "", "",                # Ray
-        "5218285", "", "",         # Reynolds
-        "", "", "",                # Townsend,J
-        "", "", "",                # Townsend,K
-        "41282", "4987418", "",    # Utschig
-        "4917690", "4837405", "32801"   # Vaccaro
-    ]
+
+from streamlit_gsheets import GSheetsConnection
+import pandas as pd
+
+# --- CONNECT TO GOOGLE SHEETS ---
+conn= st.connection("gsheets", type=GSheetsConnection)
+
+# Read the data (ttl=0 ensures it's always fresh)
+df = conn.read(spreadsheet="https://docs.google.com/spreadsheets/d/14QoWSq3pl2uxT1O7lrOYU9cRdEjSVp4ikwOetWqf-j8/edit?usp=sharing", ttl=0)
 
 # --- THE VAULT UI ---
-st.subheader("12-Team Protected Vault")
+st.subheader("12-Team Protected Vault (Live Sync)")
+
+# Create a list to hold the updated values
+updated_data= []
+
 h1, h2, h3, h4 = st.columns([2, 1, 1, 1])
 h1.write("**TEAM NAME**")
 h2.write("**SLOT 1**")
-h3.write("**SLOT 2**")
-h4.write("**SLOT3**")
+h3.write("**SLOT 2**")h4.write("**SLOT 3**")
 
 for i in range(12):
     c1, c2, c3, c4 = st.columns([2, 1, 1, 1])
-    with c1:
-        st.session_state.teams[i] = st.text_input(f"T{i}", value=st.session_state.teams[i], key=f"t_{i}", label_visibility="collapsed")
-    with c2:
-        st.session_state.vault[i*3] = st.text_input(f"S1_{i}", value=st.session_state.vault[i*3], key=f"s1_{i}", label_visibility="collapsed")
-    with c3:
-        st.session_state.vault[i*3+1] = st.text_input(f"S2_{i}", value=st.session_state.vault[i*3+1], key=f"s2_{i}", label_visibility="collapsed")
-    with c4:
-        st.session_state.vault[i*3+2] = st.text_input(f"S3_{i}", value=st.session_state.vault[i*3+2], key=f"s3_{i}", label_visibility="collapsed")
+    
+    # Get current values from the Google Sheet (or emptystring if NaN)
+    t_val = str(df.iloc[i, 0]) if not pd.isna(df.iloc[i, 0]) else ""
+    s1_val = str(df.iloc[i, 1]) if not pd.isna(df.iloc[i, 1]) else ""
+    s2_val = str(df.iloc[i, 2]) if not pd.isna(df.iloc[i, 2]) else ""
+    s3_val = str(df.iloc[i, 3]) if not pd.isna(df.iloc[i, 3]) else ""
 
-import smtplib
-from email.mime.text import MIMEText
+    with c1:
+        t = st.text_input(f"T{i}", value=t_val, key=f"t_{i}", label_visibility="collapsed")
+    with c2:
+        s1 = st.text_input(f"S1_{i}", value=s1_val, key=f"s1_{i}", label_visibility="collapsed")
+    with c3:
+        s2 = st.text_input(f"S2_{i}", value=s2_val, key=f"s2_{i}", label_visibility="collapsed")
+    with c4:
+        s3 = st.text_input(f"S3_{i}", value=s3_val, key=f"s3_{i}", label_visibility="collapsed")updated_data.append([t, s1, s2, s3])
+
+# --- SAVE & SCAN BUTTON ---
+if st.button("💾 SAVE TO SHEET & SCAN ESPN"):
+    # 1. Update the Google Sheet
+    new_df = pd.DataFrame(updated_data, columns=['TeamName', 'Slot1', 'Slot2', 'Slot3'])
+    conn.update(spreadsheet="https://docs.google.com/spreadsheets/d/14QoWSq3pl2uxT1O7lrOYU9cRdEjSVp4ikwOetWqf-j8/edit?usp=sharing", data=new_df)
+    st.sidebar.success("✅ Saved to Google Sheets!")
+    
+    # 2. Run the ESPN Scan
+    # (Make sure your check_espn() function uses the 'updated_data'list)
+    st.session_state.vault = [item for sublist in updated_data for item in sublist[1:]]
+    check_espn()
 
 # --- EMAIL CONFIG ---
 EMAIL_SENDER = "knuckleballinc@gmail.com"
