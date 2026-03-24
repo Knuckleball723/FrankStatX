@@ -48,7 +48,8 @@ updated_data= []
 h1, h2, h3, h4 = st.columns([2, 1, 1, 1])
 h1.write("**TEAM NAME**")
 h2.write("**SLOT 1**")
-h3.write("**SLOT 2**")h4.write("**SLOT 3**")
+h3.write("**SLOT 2**")
+h4.write("**SLOT 3**")
 
 for i in range(12):
     c1, c2, c3, c4 = st.columns([2, 1, 1, 1])
