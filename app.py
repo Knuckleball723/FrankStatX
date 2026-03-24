@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
-from bs4 import BeautifulSoupimport smtplib
+from bs4 import BeautifulSoup
+import smtplib
 from email.mime.text import MIMEText
 from streamlit_gsheets import GSheetsConnection
 import pandas as pd
